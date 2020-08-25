@@ -72,9 +72,13 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+DELETE '/questions/<int:question_id'
+POST '/add'
+POST '/Search'
+GET '/categories/<int:category_id>/questions'
+POST '/Play'
+
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -87,7 +91,62 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
-```
+GET '/questions'
+- Fetches a dictionary of categories first and then when 
+selecting a particular value, a set of questions in which the keys are the list of [answer, difficulty, question, category] and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: An object with a  keys with id and values of category, questions, that contains list of questions with key:value pairs. 
+{"categories":{"1":"Science",
+"2":"Art",
+"3":"Geography",
+"4":"History",
+"5":"Entertainment",
+"6":"Sports"},
+"questions":[{"answer":"Muhammad Ali",
+"category":4,
+"difficulty":1,
+"id":9,
+"question":"What boxer's original name is Cassius Clay?"}
+
+DELETE '/questions/<int:question_id'
+--Fetches question_id of a particular question to delete
+--Request Arguments: question_id
+--Returns: An object with keys as deleted ,questions, total_questions and corresponding values from list.If error, return a code 422.
+{"deleted":14,
+"questions":[{"answer":"Apollo 13","category":5,"difficulty":4,"id":2,"question":"What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"},{"answer":"Tom Cruise","category":5,"difficulty":4,"id":4,"question":"What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"},{"answer":"Edward Scissorhands","category":5,"difficulty":3,"id":6,"question":"What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"},{"answer":"Muhammad Ali","category":4,"difficulty":1,"id":9,"question":"What boxer's original name is Cassius Clay?"},{"answer":"Brazil","category":6,"difficulty":3,"id":10,"question":"Which is the only team to play in every soccer World Cup tournament?"},{"answer":"Uruguay","category":6,"difficulty":4,"id":11,"question":"Which country won the first ever soccer World Cup in 1930?"},{"answer":"George Washington Carver","category":4,"difficulty":2,"id":12,"question":"Who invented Peanut Butter?"},{"answer":"Lake Victoria","category":3,"difficulty":2,"id":13,"question":"What is the largest lake in Africa?"},{"answer":"Escher","category":2,"difficulty":1,"id":16,"question":"Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"},{"answer":"Mona Lisa","category":2,"difficulty":3,"id":17,"question":"La Giaconda is better known as what?"},{"answer":"One","category":2,"difficulty":4,"id":18,"question":"How many paintings did Van Gogh sell in his lifetime?"}],
+"success":true,"total_questions":17}
+
+POST '/add'
+--Posts json list of new row of question,answer,difficulty,category
+- Request Arguments: None
+--Returns: An object with key "Created" and value of new id that was added
+{"success":True, "created":25}
+
+POST '/Search'
+--Posts a searchTerm for a particular value in a list of questions.
+--Request Arguments: SearchTerm
+--Returns: A dictionary of objects questions,total_questions,current_category that matches the searchterm is then returned.
+{"questions":[{'answer': 'Tom Cruise', 'category': 5, 'difficulty': 4, 'id': 4, 'question': 'What actor did autho...ed Lestat?'}],
+"total_questions": 2
+"current_category: None}
+
+GET '/categories/<int:category_id>/questions'
+--Fetches a list of categories and corresponding questions in each category identified by their id.
+--Request Arguments: page
+--Returns: A dictionary of objects cotaining status, current_category,questions,total_questions.
+{"current_category":{"1":"Science","2":"Art","3":"Geography","4":"History","5":"Entertainment","6":"Sports"},
+"questions":[{"answer":"The Liver","category":1,"difficulty":4,"id":20,"question":"What is the heaviest organ in the human body?"},{"answer":"Alexander Fleming","category":1,"difficulty":3,"id":21,"question":"Who discovered penicillin?"},{"answer":"Blood","category":1,"difficulty":4,"id":22,"question":"Hematology is a branch of medicine involving the study of what?"}],
+"success":true,"total_questions":3}
+
+
+POST '/Play'
+--Posts a series of questions one by one from a chosen category.
+--Request Arguments: quizCategory and previousQuestions
+--Returns: An object with key success status, question with values of boolean and list of random selected questions.
+{"new_question": {'answer': 'Brazil', 'category': 6, 'difficulty': 3, 'id': 10, 'question': 'Which is the only te...ournament?'1},
+"success": True }
+
+
 
 
 ## Testing

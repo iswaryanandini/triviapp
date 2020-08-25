@@ -3,7 +3,7 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import random
-
+from flask import flash
 from models import setup_db, Question, Category
 
 
@@ -134,9 +134,10 @@ def create_app(test_config=None):
         new_difficulty = request.get_json()['difficulty']
         new_category = request.get_json()['category']
         newquest = Question(question = new_quest ,answer = new_answer ,difficulty = new_difficulty ,category = new_category )
-        db.session.add(newquest)
+        newquest.insert()
+        #db.session.add(newquest)
         db.session.commit()
-        flash('Question ' + newquest.id + ' was successfully listed!')
+        print('Question was successfully listed!')
         body['success'] = True
         body['created'] = newquest.id
       except:
@@ -224,17 +225,26 @@ def create_app(test_config=None):
     else:
       quizlist = Question.query.filter_by(category=quizCategory).filter(Question.id.notin_((previousQuestions))).all()
     selected = []
+    len_newquest = 0
+ 
     for eachquest in quizlist:
         selected.append(
           eachquest.format()
         )
         new_question = random.choice(selected)
+        len_newquest = len(new_question)
 
     try:
-          return jsonify({
-            'success': True,
-            'question': new_question
-          })     
+        if len_newquest > 0:
+            return jsonify({
+              'success': True,
+              'question': new_question
+            })  
+        else:
+            return jsonify({
+              'success': False,
+              'question': None
+            })     
     except:
       abort(404)
   # '''
