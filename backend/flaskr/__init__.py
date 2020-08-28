@@ -62,8 +62,10 @@ def create_app(test_config=None):
     questions = [question.format() for question in questions]
     formatted_questions = questions[start:end]
     return formatted_questions
+
   @app.route('/questions',methods=['GET'])
   def get_questions():
+      page = request.args.get('page', 1, type=int)
       questions = Question.query.all()
       if len(questions) == 0:
         abort(404)
@@ -188,7 +190,8 @@ def create_app(test_config=None):
     page = request.args.get('page', 1, type=int)
     start = (page-1) * 10
     end = page + 10
-
+    if category_id not in get_category_list():
+      abort(404)
     try:
       questlist = Question.query.filter(Question.category == category_id).all()
       formatted_quest = [eachquest.format() for eachquest in questlist]
@@ -201,7 +204,7 @@ def create_app(test_config=None):
           })
 
     except:
-      abort(422)
+        abort(422)
 
 
 
