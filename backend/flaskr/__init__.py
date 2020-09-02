@@ -33,11 +33,10 @@ def create_app(test_config=None):
   def get_categories():
     category = Category.query.order_by(Category.id).all()
     format_category = [eachcategory.format() for eachcategory in category]
-    result = {
+    return jsonify({
       'success':True,
-      'categories':get_category_list()
-    }
-    return result
+      'categories': get_category_list()
+    })
 
   
   # @TODO: 
