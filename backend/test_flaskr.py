@@ -78,18 +78,18 @@ class TriviaTestCase(unittest.TestCase):
         self.assertFalse(len(data['categories']) > 6)
 
     def test_delete_questions(self):
-        res = self.client().delete('/questions/34')
+        res = self.client().delete('/questions/10')
         data = json.loads(res.data)
-        quest = Question.query.filter(Question.id == 34).one_or_none()
+        quest = Question.query.filter(Question.id == 10).one_or_none()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted'], 34)
+        self.assertEqual(data['deleted'], 10)
 
     def test_failed_delete_questions(self):
-        res = self.client().delete('/questions/20')
+        res = self.client().delete('/questions/44')
         data = json.loads(res.data)
-        quest = Question.query.filter(Question.id == 20).one_or_none()
+        quest = Question.query.filter(Question.id == 44).one_or_none()
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
@@ -155,11 +155,11 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['question'])
 
     def test_failed_get_playquiz(self):
-        res = self.client().post('/play', json={'quiz_category': {'id': 8}})
+        res = self.client().post('/play', json={'previous_questions': [4], 'quiz_category': {'id': 8}})
         data = json.loads(res.data)
         print(data)
 
-        self.assertEqual(res.status_code, 500)
+        self.assertFalse(data['question'])
         self.assertEqual(data['success'], False)
 
 
